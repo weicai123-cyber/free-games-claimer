@@ -21,19 +21,9 @@ jobs:
           restore-keys: |
             fgc-browser-
 
-      - name: Restore claimed games data
-        uses: actions/cache@v4
-        with:
-          path: data
-          key: fgc-data-${{ github.run_id }}
-          restore-keys: |
-            fgc-data-
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
         run: npm install --no-audit --no-fund
@@ -45,18 +35,22 @@ jobs:
         run: pip install apprise
 
       - name: Claim Epic Games free games
+        id: claim
         env:
           EG_EMAIL: ${{ secrets.EG_EMAIL }}
           EG_PASSWORD: ${{ secrets.EG_PASSWORD }}
           EG_OTPKEY: ${{ secrets.EG_OTPKEY }}
           NOTIFY: ${{ secrets.NOTIFY }}
           TIME: 1
+          RECORD: 1
         run: node epic-games.js
 
-      - name: Upload screenshots on failure
-        if: failure()
+      - name: Upload screenshots and browser data
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: screenshots
-          path: data/screenshots
+          name: debug-data
+          path: |
+            data/screenshots
+            data/browser
           retention-days: 7

@@ -33,11 +33,11 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: npm
+          node-version: 22
+          cache: npm`n          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       - name: Install Firefox
         run: npx playwright install firefox --with-deps
@@ -61,3 +61,5 @@ jobs:
           name: screenshots
           path: data/screenshots
           retention-days: 7
+
+

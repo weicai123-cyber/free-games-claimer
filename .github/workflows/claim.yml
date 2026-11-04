@@ -43,14 +43,16 @@ jobs:
           NOTIFY: ${{ secrets.NOTIFY }}
           TIME: 1
           RECORD: 1
+          TIMEOUT: 120
         run: node epic-games.js
 
-      - name: Upload screenshots and browser data
+      - name: Upload debug data
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: debug-data
           path: |
             data/screenshots
+            data/record
             data/browser
           retention-days: 7

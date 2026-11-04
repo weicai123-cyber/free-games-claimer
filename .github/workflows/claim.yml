@@ -2,11 +2,9 @@ name: Claim Epic Free Games
 
 on:
   schedule:
-    # Epic 每周四 23:00 (北京时间) 换免费游戏，北京时间周五早上跑
-    # cron 是 UTC 时间: 周四 16:00 UTC = 周五 00:00 北京
     - cron: '0 16 * * 4'
-    - cron: '0 4 * * 5'   # 周五中午 12 点北京再补一次，防失败
-  workflow_dispatch: {}   # 允许手动触发（调试用）
+    - cron: '0 4 * * 5'
+  workflow_dispatch: {}
 
 jobs:
   claim:
@@ -34,7 +32,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm`n          cache-dependency-path: package-lock.json
+          cache: npm
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
         run: npm install --no-audit --no-fund
@@ -61,6 +60,3 @@ jobs:
           name: screenshots
           path: data/screenshots
           retention-days: 7
-
-
-
